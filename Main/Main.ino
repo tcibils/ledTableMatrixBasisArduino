@@ -66,9 +66,9 @@ const byte Purple = 5;
 #define NO_GAMEPAD 61440
 
 // PIN Mapping for each controller
-static const byte CONTROLLER_ONE_PIN_LATCH = 40;
-static const byte CONTROLLER_ONE_PIN_CLOCK = 42;
-static const byte CONTROLLER_ONE_PIN_DATA = 44;
+static const byte CONTROLLER_ONE_PIN_LATCH = 6;
+static const byte CONTROLLER_ONE_PIN_CLOCK = 7;
+static const byte CONTROLLER_ONE_PIN_DATA = 8;
 
 static const byte CONTROLLER_TWO_PIN_LATCH = 41;
 static const byte CONTROLLER_TWO_PIN_CLOCK = 43;
@@ -126,7 +126,8 @@ void setup() {
   pinMode(CONTROLLER_FOUR_PIN_LATCH, OUTPUT);
   pinMode(CONTROLLER_FOUR_PIN_CLOCK, OUTPUT);
   pinMode(CONTROLLER_FOUR_PIN_DATA, INPUT); 
-  
+
+  pinMode(12, OUTPUT);
 }
 
 void loop() {
@@ -140,27 +141,32 @@ if(millis() - lastMillis > 500) {
   // The code below currently reads the buttons from controller X, and display them in a digital display
   // This will allow me to check that the controller work before coding anything else
   
-  static uint16_t oldBtns = 0;      // Anciennes valeurs des boutons
-  uint16_t btns = getSnesButtons(0); // Valeurs actuelles des boutons
+   static uint16_t oldBtns = 0;      // Anciennes valeurs des boutons
+   uint16_t btns = getSnesButtons(0); // Valeurs actuelles des boutons
  
   /* Affiche l'état des boutons uniquement en cas de changement */
   if(oldBtns != btns)
     oldBtns = btns;
   else
     return;
-     
-  /* Détecte la présence (ou non) d'une manette */
+  
+  // Détecte la présence (ou non) d'une manette
   if(btns & NO_GAMEPAD) {
     Serial.println(F("No gamepad connected"));
     return;
   }
-   
-  /* Affiche l'état de chaque bouton */
-  if(btns & BTN_A)
+  
+  // Affiche l'état de chaque bouton
+  if(btns & BTN_A) {
     Serial.print(F("A "));
-  else
+    digitalWrite(12, HIGH);
+    delay(1000);
+    digitalWrite(12, LOW);
+  }
+  else {
     Serial.print(F("- "));
- 
+  }
+ /*
   if(btns & BTN_B)
     Serial.print(F("B "));
   else
@@ -215,12 +221,12 @@ if(millis() - lastMillis > 500) {
     Serial.println(F("R"));
   else
     Serial.println(F("-"));
-     
-  /* Buttton debounce */
+     */
+  // Buttton debounce
   delay(25);
     
 
-  outputDisplay();
+ // outputDisplay();
   delay(1);
 }
 
@@ -321,7 +327,7 @@ void digitalOutputDisplay() {
 
 /** Retourne l'état de chaque bouton sous la forme d'un entier sur 16 bits. */
 // For a given controller, which should be from 0 to 3 (so one of the four controllers)
-uint16_t getSnesButtons(byte buttonIndex) {
+uint16_t getSnesButtons(const byte buttonIndex) {
  
   /* 1 bouton = 1 bit */
   uint16_t value = 0;
