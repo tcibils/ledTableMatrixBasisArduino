@@ -29,10 +29,10 @@
 CRGB leds[quantityOfSingleMatrixDisplay][SINGLE_NUM_LEDS];
 
 // And their respective data pins
-#define LEDSONE_DATA_PIN 2                                            // Output pin for FastLed
-#define LEDSTWO_DATA_PIN 3                                            // Output pin for FastLed
-#define LEDSTHREE_DATA_PIN 4                                            // Output pin for FastLed
-#define LEDSFOUR_DATA_PIN 5                                            // Output pin for FastLed
+#define LEDSONE_DATA_PIN 2       // Top left
+#define LEDSTWO_DATA_PIN 3       // Top right
+#define LEDSTHREE_DATA_PIN 4     // Bottom left
+#define LEDSFOUR_DATA_PIN 5      // Bottom right
 
 // On the other hand, here is our updatable digital LED Matrix
 byte LEDMatrix[totalDisplayNumberOfRows][totalDisplayNumberOfColumns];
@@ -66,14 +66,18 @@ const byte Purple = 5;
 #define NO_GAMEPAD 61440
 
 // PIN Mapping for each controller
-static const byte CONTROLLER_ONE_PIN_LATCH = 6;
-static const byte CONTROLLER_ONE_PIN_CLOCK = 7;
-static const byte CONTROLLER_ONE_PIN_DATA = 8;
 
+// P1 is on the vent side
+static const byte CONTROLLER_ONE_PIN_LATCH = 40;
+static const byte CONTROLLER_ONE_PIN_CLOCK = 42;
+static const byte CONTROLLER_ONE_PIN_DATA = 44;
+
+// P2 is on the USB side
 static const byte CONTROLLER_TWO_PIN_LATCH = 41;
 static const byte CONTROLLER_TWO_PIN_CLOCK = 43;
 static const byte CONTROLLER_TWO_PIN_DATA = 45;
 
+// Etc
 static const byte CONTROLLER_THREE_PIN_LATCH = 48;
 static const byte CONTROLLER_THREE_PIN_CLOCK = 50;
 static const byte CONTROLLER_THREE_PIN_DATA = 52;
