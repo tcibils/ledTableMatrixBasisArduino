@@ -65,6 +65,8 @@ const byte Purple = 5;
 #define BTN_R 2048
 #define NO_GAMEPAD 61440
 
+#define NUMBER_PLAYERS 4
+
 // PIN Mapping for each controller
 
 // P1 is on the vent side
@@ -85,6 +87,16 @@ static const byte CONTROLLER_THREE_PIN_DATA = 52;
 static const byte CONTROLLER_FOUR_PIN_LATCH = 49;
 static const byte CONTROLLER_FOUR_PIN_CLOCK = 51;
 static const byte CONTROLLER_FOUR_PIN_DATA = 53;
+
+// Table storing which player is pushing which buttons (there are 12 buttons)
+// Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
+byte playerButtonPushed[NUMBER_PLAYERS][12] = {
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+}
+
 
 
 // ----------------------------------------------------------------------------------------------------
@@ -130,8 +142,6 @@ void setup() {
   pinMode(CONTROLLER_FOUR_PIN_LATCH, OUTPUT);
   pinMode(CONTROLLER_FOUR_PIN_CLOCK, OUTPUT);
   pinMode(CONTROLLER_FOUR_PIN_DATA, INPUT); 
-
-  pinMode(12, OUTPUT);
 }
 
 void loop() {
@@ -142,92 +152,8 @@ if(millis() - lastMillis > 500) {
   lastMillis = millis();
 }
 
-  // The code below currently reads the buttons from controller X, and display them in a digital display
-  // This will allow me to check that the controller work before coding anything else
   
-   static uint16_t oldBtns = 0;      // Anciennes valeurs des boutons
-   uint16_t btns = getSnesButtons(0); // Valeurs actuelles des boutons
- 
-  /* Affiche l'état des boutons uniquement en cas de changement */
-  if(oldBtns != btns)
-    oldBtns = btns;
-  else
-    return;
-  
-  // Détecte la présence (ou non) d'une manette
-  if(btns & NO_GAMEPAD) {
-    Serial.println(F("No gamepad connected"));
-    return;
-  }
-  
-  // Affiche l'état de chaque bouton
-  if(btns & BTN_A) {
-    Serial.print(F("A "));
-    digitalWrite(12, HIGH);
-    delay(1000);
-    digitalWrite(12, LOW);
-  }
-  else {
-    Serial.print(F("- "));
-  }
- /*
-  if(btns & BTN_B)
-    Serial.print(F("B "));
-  else
-    Serial.print(F("- "));
- 
-  if(btns & BTN_X)
-    Serial.print(F("X "));
-  else
-    Serial.print(F("- "));
- 
-  if(btns & BTN_Y)
-    Serial.print(F("Y "));
-  else
-    Serial.print(F("- "));
- 
-  if(btns & BTN_SELECT)
-    Serial.print(F("SELECT "));
-  else
-    Serial.print(F("------ "));
- 
-  if(btns & BTN_START)
-    Serial.print(F("START "));
-  else
-    Serial.print(F("----- "));
- 
-  if(btns & BTN_UP)
-    Serial.print(F("UP "));
-  else
-    Serial.print(F("-- "));
- 
-  if(btns & BTN_DOWN)
-    Serial.print(F("DOWN "));
-  else
-    Serial.print(F("---- "));
- 
-  if(btns & BTN_LEFT)
-    Serial.print(F("LEFT "));
-  else
-    Serial.print(F("---- "));
- 
-  if(btns & BTN_RIGHT)
-    Serial.print(F("RIGHT "));
-  else
-    Serial.print(F("----- "));
- 
-  if(btns & BTN_L)
-    Serial.print(F("L "));
-  else
-    Serial.print(F("- "));
- 
-  if(btns & BTN_R)
-    Serial.println(F("R"));
-  else
-    Serial.println(F("-"));
-     */
-  // Buttton debounce
-  delay(25);
+
     
 
  // outputDisplay();
@@ -327,6 +253,99 @@ void digitalOutputDisplay() {
       }
     }
   }
+}
+
+void checkButtons(const byte playerID) {
+  // ----------------------------------------------------------
+  // Checking if a button has been pushed, reacting accordingly
+  // ----------------------------------------------------------
+
+
+  // Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
+
+    static uint16_t oldBtns = 0;      // Anciennes valeurs des boutons
+    uint16_t btns = getSnesButtons(playerID); // Valeurs actuelles des boutons
+  
+    if(btns & NO_GAMEPAD) {
+      Serial.println(F("No gamepad connected"));
+      return;
+    }
+
+    if(btns & BTN_UP) {
+      playerButtonPushed[playerID][0] = 1;
+    }
+    else {
+      playerButtonPushed[playerID][0] = 0;
+    }
+
+    
+    if(btns & BTN_RIGHT){
+      playerButtonPushed[playerID][1] = 1;
+    }
+    else {
+      playerButtonPushed[playerID][1] = 0;      
+    }
+    
+    if(btns & BTN_DOWN) {
+      playerButtonPushed[playerID][2] = 1;
+    }
+    else {
+      playerButtonPushed[playerID][2] = 0;
+    }
+    
+    if(btns & BTN_LEFT) {
+      playerButtonPushed[playerID][3] = 1;
+    }
+    else {
+      playerButtonPushed[playerID][3] = 0;
+    }
+
+    
+    if(btns & BTN_SELECT) {
+    
+    }
+   
+    if(btns & BTN_START)
+      Serial.print(F("START "));
+    else
+      Serial.print(F("----- "));
+    
+    /* Affiche l'état de chaque bouton */
+    if(btns & BTN_A) {
+      playerButtonPushed[playerID][]
+    }
+        
+    if(btns & BTN_B){
+      if(gameStatus == 0 || gameStatus == 1) {
+        bButtonPushed = 1;
+      }
+    }
+  
+    /*
+    if(btns & BTN_X)
+      Serial.print(F("X "));
+    else
+      Serial.print(F("- "));
+   
+    if(btns & BTN_Y)
+      Serial.print(F("Y "));
+    else
+      Serial.print(F("- "));
+   
+   
+   */
+    /* 
+    if(btns & BTN_L)
+      Serial.print(F("L "));
+    else
+      Serial.print(F("- "));
+   
+    if(btns & BTN_R)
+      Serial.println(F("R"));
+    else
+      Serial.println(F("-"));
+  */
+  
 }
 
 /** Retourne l'état de chaque bouton sous la forme d'un entier sur 16 bits. */
