@@ -1,3 +1,28 @@
+
+// Defindes bits for each button
+#define BTN_A 256
+#define BTN_B 1
+#define BTN_X 512
+#define BTN_Y 2
+#define BTN_SELECT 4
+#define BTN_START 8
+#define BTN_UP 16
+#define BTN_DOWN 32
+#define BTN_LEFT 64
+#define BTN_RIGHT 128
+#define BTN_L 1024
+#define BTN_R 2048
+#define NO_GAMEPAD 61440
+
+
+
+// Updating the input from all players
+void checkAllButtons() {
+  for(byte playerIndex; playerIndex < NUMBER_PLAYERS; playerIndex++) {
+    checkButtons(playerIndex);
+  }
+}
+
 // Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
 void checkButtons(const byte playerID) {
 
