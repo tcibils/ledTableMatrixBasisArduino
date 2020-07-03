@@ -88,14 +88,14 @@ static const byte CONTROLLER_FOUR_PIN_LATCH = 49;
 static const byte CONTROLLER_FOUR_PIN_CLOCK = 51;
 static const byte CONTROLLER_FOUR_PIN_DATA = 53;
 
-// Table storing which player is pushing which buttons (there are 12 buttons)
+// Table storing which player is pushing which buttons, so it can easily be accessed anywhere in the code (there are 12 buttons)
 // Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
 byte playerButtonPushed[NUMBER_PLAYERS][12] = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-}
+};
 
 
 
@@ -255,13 +255,9 @@ void digitalOutputDisplay() {
   }
 }
 
+
+// Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
 void checkButtons(const byte playerID) {
-  // ----------------------------------------------------------
-  // Checking if a button has been pushed, reacting accordingly
-  // ----------------------------------------------------------
-
-
-  // Stored as follows: UP - RIGHT - DOWN - LEFT - START - SELECT - A - B - X - Y - L - R
 
     static uint16_t oldBtns = 0;      // Anciennes valeurs des boutons
     uint16_t btns = getSnesButtons(playerID); // Valeurs actuelles des boutons
@@ -271,81 +267,44 @@ void checkButtons(const byte playerID) {
       return;
     }
 
-    if(btns & BTN_UP) {
-      playerButtonPushed[playerID][0] = 1;
-    }
-    else {
-      playerButtonPushed[playerID][0] = 0;
-    }
+    if   (btns & BTN_UP)   {playerButtonPushed[playerID][0] = 1;}
+    else                   {playerButtonPushed[playerID][0] = 0;}
+    
+    if   (btns & BTN_RIGHT){playerButtonPushed[playerID][1] = 1;}
+    else                   {playerButtonPushed[playerID][1] = 0;}
+    
+    if   (btns & BTN_DOWN) {playerButtonPushed[playerID][2] = 1;}
+    else                   {playerButtonPushed[playerID][2] = 0;}
+    
+    if   (btns & BTN_LEFT) {playerButtonPushed[playerID][3] = 1;}
+    else                   {playerButtonPushed[playerID][3] = 0;}
 
     
-    if(btns & BTN_RIGHT){
-      playerButtonPushed[playerID][1] = 1;
-    }
-    else {
-      playerButtonPushed[playerID][1] = 0;      
-    }
-    
-    if(btns & BTN_DOWN) {
-      playerButtonPushed[playerID][2] = 1;
-    }
-    else {
-      playerButtonPushed[playerID][2] = 0;
-    }
-    
-    if(btns & BTN_LEFT) {
-      playerButtonPushed[playerID][3] = 1;
-    }
-    else {
-      playerButtonPushed[playerID][3] = 0;
-    }
-
-    
-    if(btns & BTN_SELECT) {
-    
-    }
+    if(btns & BTN_START)   {playerButtonPushed[playerID][4] = 1;}
+    else                   {playerButtonPushed[playerID][4] = 0;}
    
-    if(btns & BTN_START)
-      Serial.print(F("START "));
-    else
-      Serial.print(F("----- "));
+    if(btns & BTN_SELECT)  {playerButtonPushed[playerID][5] = 1;}
+    else                   {playerButtonPushed[playerID][5] = 0;}
     
-    /* Affiche l'état de chaque bouton */
-    if(btns & BTN_A) {
-      playerButtonPushed[playerID][]
-    }
+
+    if(btns & BTN_A)       {playerButtonPushed[playerID][6] = 1;}
+    else                   {playerButtonPushed[playerID][6] = 0;}
+
+    if(btns & BTN_B)       {playerButtonPushed[playerID][7] = 1;}
+    else                   {playerButtonPushed[playerID][7] = 0;}
+    
+    if(btns & BTN_X)       {playerButtonPushed[playerID][8] = 1;}
+    else                   {playerButtonPushed[playerID][8] = 0;}
+    
+    if(btns & BTN_Y)       {playerButtonPushed[playerID][9] = 1;}
+    else                   {playerButtonPushed[playerID][9] = 0;}
         
-    if(btns & BTN_B){
-      if(gameStatus == 0 || gameStatus == 1) {
-        bButtonPushed = 1;
-      }
-    }
-  
-    /*
-    if(btns & BTN_X)
-      Serial.print(F("X "));
-    else
-      Serial.print(F("- "));
-   
-    if(btns & BTN_Y)
-      Serial.print(F("Y "));
-    else
-      Serial.print(F("- "));
-   
-   
-   */
-    /* 
-    if(btns & BTN_L)
-      Serial.print(F("L "));
-    else
-      Serial.print(F("- "));
-   
-    if(btns & BTN_R)
-      Serial.println(F("R"));
-    else
-      Serial.println(F("-"));
-  */
-  
+    
+    if(btns & BTN_L)       {playerButtonPushed[playerID][10] = 1;}
+    else                   {playerButtonPushed[playerID][10] = 0;}
+    
+    if(btns & BTN_R)       {playerButtonPushed[playerID][11] = 1;}
+    else                   {playerButtonPushed[playerID][11] = 0;}
 }
 
 /** Retourne l'état de chaque bouton sous la forme d'un entier sur 16 bits. */
