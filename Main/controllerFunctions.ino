@@ -18,7 +18,7 @@
 
 // Updating the input from all players
 void checkAllButtons() {
-  for(byte playerIndex; playerIndex < NUMBER_PLAYERS; playerIndex++) {
+  for(byte playerIndex=0; playerIndex < NUMBER_PLAYERS; playerIndex++) {
     checkButtons(playerIndex);
   }
 }
