@@ -95,6 +95,13 @@ struct pointOnMatrix {
   byte columnCoordinate;
 };
 
+pointOnMatrix Player[4] = {
+  {0,0},
+  {31,0},
+  {0,31},
+  {31,31}
+};
+
 unsigned long lastMillis = 0;
 unsigned const int growthSpeed = 1500;  // In miliseconds. Can be used to make something happen every X miliseconds.
 
@@ -132,16 +139,37 @@ void setup() {
 
 void loop() {
 
-if(millis() - lastMillis > 500) {
-
-
-  lastMillis = millis();
-}
+if(millis() - lastMillis > 200) {
 
   
+  lastMillis = millis();
+}
+    checkAllButtons();
 
+  for(byte i = 0; i<4; i++) {
+    if (Player[i].lineCoordinate > 0 && playerButtonPushed[i][0]) {
+      Player[i].lineCoordinate--;
+    }
+    if (Player[i].lineCoordinate < 31 && playerButtonPushed[i][2]) {
+      Player[i].lineCoordinate++;
+    }
     
+    if (Player[i].columnCoordinate > 0 && playerButtonPushed[i][3]) {
+      Player[i].columnCoordinate--;
+    }
+    
+    if (Player[i].columnCoordinate < 31 && playerButtonPushed[i][1]) {
+      Player[i].columnCoordinate++;
+    }
+  }
 
- // outputDisplay();
+  clearLEDMatrix();
+  
+  LEDMatrix[Player[0].lineCoordinate][Player[0].columnCoordinate] = Blue;
+  LEDMatrix[Player[1].lineCoordinate][Player[1].columnCoordinate] = Red;
+  LEDMatrix[Player[2].lineCoordinate][Player[2].columnCoordinate] = Green;
+  LEDMatrix[Player[3].lineCoordinate][Player[3].columnCoordinate] = Purple;
+
+  outputDisplay();
   delay(1);
 }
