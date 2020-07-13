@@ -11,3 +11,5 @@ How to use it:
  - At the end of the loop, keep the "clearLEDMatrix()", and then outputDisplay(), which will take your "LEDMatrix" and plot it on the table through a mapping.
  
  If needed, you can also use digitalOutputDisplay() to plot the LEDMatrix in the Arduino "Moniteur Série".
+
+(testing git on rasperry pi)
