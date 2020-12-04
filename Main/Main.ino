@@ -44,6 +44,14 @@ const byte Blue = 2;
 const byte Red = 3;
 const byte Green = 4;
 const byte Purple = 5;
+const byte LightBlue = 6;
+const byte Pink = 7;
+const byte Orange = 8;
+const byte Yellow = 9;
+const byte LightPurple = 10;
+
+const byte LightGreen = 13;
+const byte LightestBlue = 14;
 
 
 // ----------------------------------------------------------------------------------------------------
